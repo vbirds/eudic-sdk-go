@@ -1,8 +1,8 @@
 package dict
 
 import (
+	"encoding/json"
 	"fmt"
-	"net/http"
 )
 
 // GetCategories returns all word categories for the specified language
@@ -79,7 +79,7 @@ func (c *Client) DeleteCategory(id, language string) error {
 func (c *Client) GetWords(categoryID, language string, page, pageSize int) ([]Word, error) {
 	path := fmt.Sprintf("/studylist/words/%s?language=%s&page=%d&page_size=%d",
 		categoryID, language, page, pageSize)
-	
+
 	resp, err := c.doRequest("GET", path, nil)
 	if err != nil {
 		return nil, err

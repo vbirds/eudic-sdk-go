@@ -3,7 +3,6 @@ package dict
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -34,15 +33,15 @@ func (c *Client) doRequest(method, path string, body interface{}) (*http.Respons
 		}
 	}
 
-	req, err := http.NewRequest(method, baseURL+path, bytes.NewBuffer(reqBody))
+	var url = baseURL + path
+	req, err := http.NewRequest(method, url, bytes.NewBuffer(reqBody))
 	if err != nil {
 		return nil, err
 	}
 
-	req.Header.Set("Authorization", "Bearer "+c.token)
-	if method != "GET" && body != nil {
-		req.Header.Set("Content-Type", "application/json")
-	}
+	req.Header.Set("Authorization", c.token)
+	req.Header.Set("User-Agent", "Apifox/1.0.0 (https://apifox.com)")
+	req.Header.Set("Content-Type", "application/json")
 
 	return c.httpClient.Do(req)
 }
